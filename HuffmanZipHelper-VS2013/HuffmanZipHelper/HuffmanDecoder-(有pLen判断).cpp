@@ -35,7 +35,7 @@ void HuffmanDecoder::init() {
 		return;
 	}
 	if (checkZippedFileValidity() != 0) {
-		errMsgDisplay("´ı½âÑ¹ÎÄ¼ş¸ñÊ½ÓĞÎó,ÇëÖØĞÂÑ¡Ôñ!\n");
+		errMsgDisplay("å¾…è§£å‹æ–‡ä»¶æ ¼å¼æœ‰è¯¯,è¯·é‡æ–°é€‰æ‹©!\n");
 		status = -1;
 		return;
 	}
@@ -44,21 +44,21 @@ void HuffmanDecoder::init() {
 	//hfmTreeTable = new BinTreeTable[zipFileHeadTag.cDictItemNumb];
 	memset(hfmTreeTable, 0, zipFileHeadTag.cDictSize);
 	if (checkBinTreeTableValidity() != 0) {
-		errMsgDisplay("¹ş·òÂü±íÓĞÎó,ÇëÖØĞÂÑ¡ÔñÎÄ¼ş!\n");
+		errMsgDisplay("å“ˆå¤«æ›¼è¡¨æœ‰è¯¯,è¯·é‡æ–°é€‰æ‹©æ–‡ä»¶!\n");
 		status = -1;
 		return;
 	}
 
 	{
-		/*ÎÄ¼ş±êÇ©,¼´"WT"ÕâÁ½¸ö×Ö·û*/
+		/*æ–‡ä»¶æ ‡ç­¾,å³"WT"è¿™ä¸¤ä¸ªå­—ç¬¦*/
 		//zipFileHeadTag.zipTag = 0x5457;
-		/*ÎÄ¼ş°æ±¾,µ±Ç°Îª1.00*/
+		/*æ–‡ä»¶ç‰ˆæœ¬,å½“å‰ä¸º1.00*/
 		//zipFileHeadTag.zipVer = 0x0001;
-		/*Ô­ÎÄ¼ş´óĞ¡*/
+		/*åŸæ–‡ä»¶å¤§å°*/
 		//zipFileHeadTag.oFileSize = oFileSize;
-		/*µ¥Ìõ×Öµä¼ÇÂ¼´óĞ¡*/
+		/*å•æ¡å­—å…¸è®°å½•å¤§å°*/
 		//zipFileHeadTag.cDictItemSize = sizeof(BinTreeTable);
-		/*×ÖµäÎ»ÖÃÆ«ÒÆÁ¿*/
+		/*å­—å…¸ä½ç½®åç§»é‡*/
 		//zipFileHeadTag.cDictPosi = sizeof(ZIPFileInfo);
 	}
 }
@@ -66,12 +66,12 @@ void HuffmanDecoder::init() {
 int HuffmanDecoder::openFile() {
 	zippedFile.open(zippedFilePath, ios::in | ios::binary);
 	if (!zippedFile.is_open()) {
-		errMsgDisplay("Ô­ÎÄ¼ş´ò¿ªÊ§°Ü!\n");
+		errMsgDisplay("åŸæ–‡ä»¶æ‰“å¼€å¤±è´¥!\n");
 		return -1;
 	}
 	originalFile.open(originalFilePath, ios::out | ios::binary | ios::trunc);
 	if (!originalFile.is_open()) {
-		errMsgDisplay("´´½¨²¢Ğ´ÈëÎÄ¼şÊ§°Ü!\n");
+		errMsgDisplay("åˆ›å»ºå¹¶å†™å…¥æ–‡ä»¶å¤±è´¥!\n");
 		return -1;
 	}
 	zippedFile.seekg(0, zippedFile.end);
@@ -81,24 +81,24 @@ int HuffmanDecoder::openFile() {
 }
 
 int HuffmanDecoder::checkZippedFileValidity() {
-	/*ÎÄ¼ş´óĞ¡ÖÁÉÙ49×Ö½Ú(ÎÄ¼şÍ·32×Ö½Ú+ÖÁÉÙÒ»Ìõ×Öµä¼ÇÂ¼16×Ö½Ú+ÎÄ¼şÄ©Î²Âë1×Ö½Ú)*/
+	/*æ–‡ä»¶å¤§å°è‡³å°‘49å­—èŠ‚(æ–‡ä»¶å¤´32å­—èŠ‚+è‡³å°‘ä¸€æ¡å­—å…¸è®°å½•16å­—èŠ‚+æ–‡ä»¶æœ«å°¾ç 1å­—èŠ‚) */
 	if (zFileSize < (sizeof(ZIPFileInfo) + sizeof(BinTreeTable) + 1)) {
-		errMsgDisplay("ÎÄ¼ş´óĞ¡²»·ûºÏ×îĞ¡Ñ¹ËõÎÄ¼ş´óĞ¡!\n");
+		errMsgDisplay("æ–‡ä»¶å¤§å°ä¸ç¬¦åˆæœ€å°å‹ç¼©æ–‡ä»¶å¤§å°!\n");
 		return -1;
 	}
 	zippedFile.clear();
 	zippedFile.seekg(0,ios::beg);
 	zippedFile.read((char*)&zipFileHeadTag, sizeof(ZIPFileInfo));
 	if (zipFileHeadTag.zipTag != 0x5457) {
-		errMsgDisplay("´ËÎÄ¼ş·ÇÑ¹ËõÎÄ¼ş,¸ñÊ½´íÎó\n");
+		errMsgDisplay("æ­¤æ–‡ä»¶éå‹ç¼©æ–‡ä»¶,æ ¼å¼é”™è¯¯\n");
 		return -2;
 	}
 	if (zipFileHeadTag.zipVer != 0x0001) {
-		errMsgDisplay("´ËÑ¹ËõÎÄ¼ş°æ±¾¹ı¸ß,ÔİÎŞ·¨´ò¿ª\n");
+		errMsgDisplay("æ­¤å‹ç¼©æ–‡ä»¶ç‰ˆæœ¬è¿‡é«˜,æš‚æ— æ³•æ‰“å¼€\n");
 		return -3;
 	}
 	if (zipFileHeadTag.cFileSize != zFileSize) {
-		errMsgDisplay("´ËÑ¹ËõÎÄ¼şÊµ¼Ê´óĞ¡Óë¼ÇÂ¼²»·û\n");
+		errMsgDisplay("æ­¤å‹ç¼©æ–‡ä»¶å®é™…å¤§å°ä¸è®°å½•ä¸ç¬¦\n");
 		return -4;
 	}
 	if (zipFileHeadTag.cDataPosi < zipFileHeadTag.cDictPosi + sizeof(BinTreeTable)) {
@@ -135,7 +135,7 @@ int HuffmanDecoder::checkZippedFileValidity() {
 		errMsgDisplay("........-12\n");
 		return -12;
 	}
-	/*Ó¦¸Ã»¹ÓĞºÜ¶àÑÏ¸ñµÄÅĞ¶ÏÌõ¼ş...*/
+	/*åº”è¯¥è¿˜æœ‰å¾ˆå¤šä¸¥æ ¼çš„åˆ¤æ–­æ¡ä»¶...*/
 	
 	return 0;
 }
@@ -145,17 +145,17 @@ int HuffmanDecoder::checkBinTreeTableValidity() {
 	zippedFile.seekg(sizeof(ZIPFileInfo), ios::beg);
 	zippedFile.read((char*)hfmTreeTable, zipFileHeadTag.cDictSize);
 	if (hfmTreeTable[0].par != -1) {
-		errMsgDisplay("×Öµä¼ÇÂ¼¹ş·òÂüÂë±íÓĞÎó!\n");
+		errMsgDisplay("å­—å…¸è®°å½•å“ˆå¤«æ›¼ç è¡¨æœ‰è¯¯!\n");
 		return -1;
 	}
 	if (hfmTreeTable[0].depth != 1) {
-		errMsgDisplay("×Öµä¼ÇÂ¼¹ş·òÂüÂë±íÓĞÎó!\n");
+		errMsgDisplay("å­—å…¸è®°å½•å“ˆå¤«æ›¼ç è¡¨æœ‰è¯¯!\n");
 		return -2;
 	}
 
 
 
-	/*Ó¦¸Ã»¹ÓĞºÜ¶àÑÏ¸ñµÄÅĞ¶ÏÌõ¼ş...*/
+	/*åº”è¯¥è¿˜æœ‰å¾ˆå¤šä¸¥æ ¼çš„åˆ¤æ–­æ¡ä»¶...*/
 
 	return 0;
 }
@@ -251,7 +251,7 @@ int HuffmanDecoder::readByteStream() {
 		}
 		trimPrefixCode(tmp, tmplen, tmplen - pLen);
 	}
-	/*´¦ÀíÑ¹ËõÊı¾İµÄ×îºó1¸ö×Ö½Ú*/
+	/*å¤„ç†å‹ç¼©æ•°æ®çš„æœ€å1ä¸ªå­—èŠ‚*/
 	tmplen = getPrefixCodeLen(tmp);
 	pLen = 0;
 	tempp = 0;
@@ -267,7 +267,7 @@ int HuffmanDecoder::readByteStream() {
 		originalFile.write(&hfmTreeTable->reserve3, 1);
 		eLen++;
 	}
-	cout << "½âÑ¹µÃµ½Ô­ÎÄ¼ş´óĞ¡Îª:" << eLen << "×Ö½Ú" << endl;
+	cout << "è§£å‹å¾—åˆ°åŸæ–‡ä»¶å¤§å°ä¸º:" << eLen << "å­—èŠ‚" << endl;
 
 	return 0;
 
@@ -275,7 +275,7 @@ int HuffmanDecoder::readByteStream() {
 
 int HuffmanDecoder::decode() {
 	if (status != 0) {
-		errMsgDisplay("½âÂëÆ÷³ö´í,¼´½«ÍË³ö...\n");
+		errMsgDisplay("è§£ç å™¨å‡ºé”™,å³å°†é€€å‡º...\n");
 		return -1;
 	}
 	hfmTree = convertTableToTree(hfmTreeTable);
@@ -295,6 +295,6 @@ int HuffmanDecoder::decode() {
 	originalFile.close();
 	zippedFile.close();
 	if (status == 0)
-		cout << "½âÂë³É¹¦,½âÑ¹³öµÄÎÄ¼şÂ·¾¶Îª:" << originalFilePath << endl << "°´»Ø³µ¼ü¼ÌĞø\n";
+		cout << "è§£ç æˆåŠŸ,è§£å‹å‡ºçš„æ–‡ä»¶è·¯å¾„ä¸º:" << originalFilePath << endl << "æŒ‰å›è½¦é”®ç»§ç»­\n";
 	cin.get();
 }
